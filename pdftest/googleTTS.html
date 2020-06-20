@@ -1,0 +1,146 @@
+<!doctype html>
+ 
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="referrer" content="no-referrer"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+<input type="text" name="text"/><a href="#" class="say">say it</a>
+<audio src="" class="speech" hidden></audio>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.min.js">
+</script>
+
+<script>
+$(function(){
+	$('a.say').on('click', function(e){
+		e.preventDefault();
+		var text = $('input[name="text"]').val();
+		text = encodeURIComponent(text);
+		//var url = "https://translate.google.com/translate_tts?ie=UTF-8&q" + text + "&tl=en";
+		var lang = "en-GB";
+		text = 'Adopting Concepts of Freinet Pedagogy in Higher Education';
+		/*
+		text = 'Adop%ng Concepts of Freinet Pedagogy in Higher Educa%on –  A Report on the Design and Evolu%on of a Didac%cal Experiment1 Stefan Oppl, Department of Software Science, Radboud University, Nijmegen, NL 1 Introduc%on Scienti(ic writing is a topic usually adopted in academic curricula on bachelor and master level (Marušic & Marušic, 2003; McNeill, 2009). Courses in scienti(ic writing often focus on topics like formulating scienti(ic questions, literature research, structuring of an article or correctly referencing sources (Rice, 1998; Rönnebeck, Bernholt, & Ropohl, 2016). Those craft-like skills are often be complemented by introducing students to skills related to scienti(ic inquiry in general, such as analysing, interpreting and evaluating data, engaging in argumentation or communicating scienti(ic results (Etkina et al., 2010; Rönnebeck et al., 2016).';
+		text = 'Adop%ng Concepts of Freinet Pedagogy in Higher Educa%on –  A Report on the Design and Evolu%on of a Didac%cal Experiment1 Stefan Oppl, Department of Software Science, Radboud University, Nijmegen, NL 1 Introduc%on Scienti(ic writing is a topic usually adopted in academic curricula on bachelor and master level (Marušic & Marušic, 2003; McNeill, 2009). Courses in scienti(ic writing often focus on topics like formulating scienti(ic questions, literature research, structuring of an article or correctly referencing sources (Rice, 1998; Rönnebeck, Bernholt, & Ropohl, 2016). Those craft-like skills are often be complemented by introducing students to skills related to scienti(ic inquiry in general, such as analysing, interpreting and evaluating data, engaging in argumentation or communicating scienti(ic results (Etkina et al., 2010; Rönnebeck et al., 2016).';
+		text = 'Adop%ng Concepts of Freinet Pedagogy in Higher Educa%on –  A Report on the Design and Evolu%on of a Didac%cal Experiment1 Stefan Oppl, Department of Software Science, Radboud University, Nijmegen, NL 1 Introduc%on Scienti(ic writing is a topic usually adopted in academic curricula on bachelor and master level (Marušic & Marušic, 2003; McNeill, 2009). Courses in scienti(ic writing often focus on topics like formulating scienti(ic questions, literature research, structuring of an article or correctly referencing sources (Rice, 1998; Rönnebeck, Bernholt, & Ropohl, 2016). Those craft-like skills are often be complemented by introducing students to skills related to scienti(ic inquiry in general, such as analysing, interpreting and evaluating data, engaging in argumentation or communicating scienti(ic results (Etkina et al., 2010; Rönnebeck et al., 2016).';
+		*/
+		var url = "https://translate.google.com/translate_tts?ie=UTF-8&tl="+ lang +"&client=tw-ob&q=" + text;
+		console.log(url);
+		//$('audio').attr('src', url).get(0);
+		$('audio').attr('src', url).get(0).play();
+		});
+	});
+
+</script>
+
+
+
+<script>
+    var myState = {
+        pdf: null,
+        currentPage: 1,
+        zoom: 1
+    }
+	// more code here
+
+	pdfjsLib.getDocument('AdoptingConceptsofFreinetPedagogyinHigherEducation.pdf').then((pdf) => {
+		// more code here
+		myState.pdf = pdf;
+		function render() {
+			myState.pdf.getPage(myState.currentPage).then((page) => {
+				// more code here
+				var canvas = document.getElementById("pdf_renderer");
+				var ctx = canvas.getContext('2d');
+				var viewport = page.getViewport(myState.zoom);
+				canvas.width = viewport.width;
+				canvas.height = viewport.height;
+				page.render({
+					canvasContext: ctx,
+					viewport: viewport
+				});
+			});
+		}
+		render();
+		document.getElementById('go_previous').addEventListener('click', (e) => {
+            if(myState.pdf == null || myState.currentPage == 1)
+				return;
+			
+			var  url = "film1.wav"
+			$('audio').attr('src', url).get(0).play();
+			myState.currentPage -= 1;
+			document.getElementById("current_page").value = myState.currentPage;
+			render();
+        });
+
+		document.getElementById('go_next').addEventListener('click', (e) => {
+            if(myState.pdf == null || myState.currentPage > myState.pdf._pdfInfo.numPages) 
+				return;
+			
+			var  url = "film1.wav"
+			$('audio').attr('src', url).get(0).play();
+			myState.currentPage += 1;
+			document.getElementById("current_page").value = myState.currentPage;
+			render();
+        });
+
+		document.getElementById('current_page').addEventListener('keypress', (e) => {
+            if(myState.pdf == null) return;
+         
+            // Get key code
+            var code = (e.keyCode ? e.keyCode : e.which);
+         
+            // If key code matches that of the Enter key
+            if(code == 13) {
+                var desiredPage = document.getElementById('current_page').valueAsNumber;
+                                 
+                if(desiredPage >= 1 
+                   && desiredPage <= myState.pdf._pdfInfo.numPages) {
+                        myState.currentPage = desiredPage;
+                        document.getElementById("current_page").value = desiredPage;
+                        render();
+                }
+            }
+        });
+		document.getElementById('zoom_in').addEventListener('click', (e) => {
+            if(myState.pdf == null) return;
+            myState.zoom += 0.5;
+            render();
+        });
+		document.getElementById('zoom_out').addEventListener('click', (e) => {
+            if(myState.pdf == null) return;
+            myState.zoom -= 0.5;
+            render();
+        });
+	});	
+</script>
+
+<a href="#" onclick="playAudio()">Play Audio</a>
+
+<div id="my_pdf_viewer">
+   
+   
+   <div id="canvas_container">
+		<canvas id="pdf_renderer"></canvas>
+	</div>
+
+<div id="navigation_controls">
+    <button id="go_previous">Previous</button>
+    <input id="current_page" value="1" type="number" hidden/>
+    <button id="go_next">Next</button>
+</div>
+<div id="zoom_controls">  
+    <button id="zoom_in">+</button>
+    <button id="zoom_out">-</button>
+</div>
+</div>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,115 @@
+
+
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title></title>
+    <link rel="stylesheet" href="css/foundation.css"/>
+    <link rel="stylesheet" href="css/styles.css"/>
+    <link rel="stylesheet" href="css/github.css"/>
+
+
+</head>
+
+
+
+
+<body data-page="documentation">
+
+<div class="sub-header">
+    <h1>Documentation</h1>
+</div>
+
+<div id="content">
+
+
+    <div class="row">
+        <div class="small-3 columns sidebar">
+            <aside >
+                <ul>
+                    <li><h3>Using the demos</h3></li>
+                    <li><a  href="demos.html">Instructions</a></li>
+
+
+                </ul>
+
+                <ul>
+                    <li><h3>Installation & Usage</h3></li>
+                    <li><a  href="quick-start.html">Quick Start</a></li>
+                    <li><a  href="detailed-installation.html">Detailed Installation</a></li>
+                    <li><a  href="options.html">Plugin Options</a></li>
+
+
+                </ul>
+
+
+
+                <ul>
+                    <li><h3>Help</h3></li>
+                    <li><a class='active' href="debugging.html">Debugging</a></li>
+                    <li><a  href="faqs.html">Faqs</a></li>
+                    <li><a  href="dependency-loader.html">Dependency Loader</a></li>
+
+                </ul>
+
+
+
+            </aside>
+        </div>
+        <div class="small-9 columns">
+
+            <select id="mobile-documentation-nav">
+                    <option value="quick-start">Quick Start</option>
+                    <option value="detailed-installation">Detailed Installation</option>
+                    <option value="playlist">Document List Setup</option>
+                    <option value="options">Plugin Options</option>
+                    <option value="debugging">Debugging</option>
+                    <option value="faqs">FAQs</option>
+                    <option value="dependency-loader">Dependency Loader</option>
+
+            </select>
+            <div id="debugging">
+    <h2>Debugging</h2>
+    <p>If you run into issues. Your first step should be to turn on the plugin’s debug option.
+        This will display debugging messages to your browser’s console.</p>
+
+<pre><code>
+    var viewer = new DocumentViewer({
+        debug: true
+    });
+</code></pre>
+
+    <p><strong>Possible debugging messages:</strong></p>
+
+    <ol>
+        <li> Invalid File Type - This means you are attempting to open a file type that the document viewer plugin does
+            not support.</li>
+        <li> Invalid File Type. Please set enableTextAndCode option to true – This means you are attempting to open a
+            text or code file, but you have enableTextAndCode = false. You must change this to true to open these types
+            of files.</li>
+        <li> jPlayer Ready – This means that jPlayer is ready. If you are attempting to open a file format that is
+            supported by jPlayer and you do not see this message in the console, then something is wrong with your
+            jPlayer configuration.</li>
+        <li> Error loading file ('some/file/name '). Please make sure that the path is correct – This means that
+            the path you supplied to the file is incorrect or that the plugin can’t access the location of the file.</li>
+        <li> There was an error loading the dependency – This means that the dependency loader was unable to load
+            one of the dependencies. This is most likely due to an incorrect value for options.path. Please see the
+            Important Notes section for more information.</li>
+
+    </ol>
+   </div>
+
+        </div>
+    </div>
+
+
+</div>
+<script type="text/javascript" src="js/highlight.pack.js"></script>
+<script type="text/javascript">
+    console.log(hljs);
+    hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
