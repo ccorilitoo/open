@@ -71,7 +71,7 @@ function langFetch(lang) {
 	$('.garamontOPEN-' + lang).hide();
 	switch (lang) {
 		case 'bulgaria':
-			$('.garamont-bulgaria.langSelect').hide();
+			$('.garamontOPEN-bulgaria').hide();
 			sheets_bg.sheet1 ? '' : sheets_bg.sheet1 = $.parseJSON($.ajax({
 				url: "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/8/public/values?alt=json",
 				dataType: "json",
@@ -111,7 +111,7 @@ function langFetch(lang) {
 			currlang = "bg";
 			break;
 		case 'spain':
-			$('.garamont-spain.langSelect').hide();
+			$('.garamontOPEN-spain').hide();
 			sheets_es.sheet1 ? '' : sheets_es.sheet1 = $.parseJSON($.ajax({
 				url: "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/14/public/values?alt=json",
 				dataType: "json",
@@ -152,7 +152,7 @@ function langFetch(lang) {
 			currlang = "es";
 		break;
 		case 'poland':
-			$('.garamont-poland.langSelect').hide();
+			$('.garamontOPEN-poland').hide();
 			sheets_pl.sheet1 ? '' : sheets_pl.sheet1 = $.parseJSON($.ajax({
 				url: "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/20/public/values?alt=json",
 				dataType: "json",
@@ -192,7 +192,7 @@ function langFetch(lang) {
 			currlang = "pl";
 		break;
 		case 'turkey':
-			$('.garamont-turkey.langSelect').hide();
+			$('.garamontOPEN-turkey').hide();
 			sheets_tr.sheet1 ? '' : sheets_tr.sheet1 = $.parseJSON($.ajax({
 				url: "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/26/public/values?alt=json",
 				dataType: "json",
@@ -232,7 +232,7 @@ function langFetch(lang) {
 			currlang = "tr";
 		break;
 		default:
-			$('.garamont-united-kingdom.langSelect').hide();
+			$('.garamontOPEN-united-kingdom').hide();
 			sheets_gb.sheet1 ? '' : sheets_gb.sheet1 = $.parseJSON($.ajax({
 				url: "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/2/public/values?alt=json",
 				dataType: "json",
@@ -278,7 +278,7 @@ function langFetch(lang) {
 	langFetch('united-kingdom');
 	
 	
-	$('.flag-elemnt').on('click', function(e){
+	jQuery('.flag-elemnt').on('click', function(e){
 		var lang =  e.target.closest('div');
 		lang =  $(lang).attr('class').split(/\s+/)[1].split('-')[1];
 		langFetch(lang);
@@ -509,6 +509,58 @@ $('.this-ts').magnificPopup({
 }
 populateBooks();
    
+   function sectionOne() {
+		
+		
+	   var newDivElement111 = document.createElement('div');
+		$(newDivElement111).addClass('container');
+		var newDivElement222 = document.createElement('div');
+		$(newDivElement222).addClass('row');
+		var newDivElement333 = document.createElement('div');
+		$(newDivElement333).addClass('col-md-12');
+		
+		var newDivElement444 = document.createElement('h1');
+		$(newDivElement444).addClass('onStep').html($(sheet2)[0]['gsx$focus']['$t']);
+		$(newDivElement444).attr("data-animation","fadeInUp").attr("data-time","300");
+		
+		var newDivElement555 = document.createElement('div');
+		$(newDivElement555).addClass('onStep').attr("data-animation","fadeInUp").attr("data-time","600").attr("id","slidertext");
+		
+		
+		var newDivElement555 = document.createElement('h3');
+		$(newDivElement555).addClass('devider-heading').html($(sheet2)[0]['gsx$focus']['$t']);
+		
+		$(newDivElement333).append(newDivElement444);
+		$(newDivElement333).append(newDivElement555);
+		$(newDivElement333).append('<div class="space-double"></div>');
+		$(newDivElement222).append(newDivElement333);
+		
+		for (i = 4; i < sheet2.length; i++) {
+			var newDivElement = document.createElement('div');
+			$(newDivElement).addClass('col-md-3');
+			var newDivElement1 = document.createElement('div');
+			$(newDivElement1).addClass('wrap-price onStep animated fadeInUp').attr("data-animation","fadeInUp").attr("data-time",300 * i);
+			var newDivElement12 = document.createElement('div');
+			$(newDivElement12).addClass('price').addClass($(sheet2)[i]['gsx$text']['$t']);
+			var newDivElement123 = document.createElement('div');
+			$(newDivElement123).addClass('level-class').html($(sheet2)[i]['gsx$focus']['$t']);
+			$(newDivElement1).append(newDivElement12);
+			$(newDivElement1).append(newDivElement123);
+			$(newDivElement1).append($(sheet2)[i]['gsx$text']['$t']);
+			$(newDivElement).append(newDivElement1);
+			if( i % 4 == 0 )
+			{
+				$(newDivElement222).append('<div class="col-md-2"></div>');
+			}
+			$(newDivElement222).append(newDivElement);
+		} 
+		$(newDivElement111).append(newDivElement222);
+		$('#home').attr("data-image-src",$(sheet2)[2]['gsx$focus']['$t']);
+		$('#home').append(newDivElement111);
+}
+sectionOne();
+
+
    function sectionFour() {
 	   var newDivElement111 = document.createElement('div');
 		$(newDivElement111).addClass('container');

@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<style>
+* {box-sizing: border-box}
+
+/* Set height of body and the document to 100% */
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial;
+}
+
+/* Style tab links */
+.tablink {
+  background-color: #555;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  width: 25%;
+}
+
+.tablink:hover {
+  background-color: #777;
+}
+
+/* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+  display: none;
+  padding: 100px 20px;
+  height: 100%;
+}
+
+form{
+	margin: 20px auto;
+}
+
+input[type=text], select, textarea {
+  width: 15%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  vertical-align: top;
+  margin: 10px;
+}
+
+textarea{
+	width: 25%;
+	height: 100px;
+	resize: none;
+}
+
+label {
+  padding: 12px 12px 12px 0;
+  display: inline-block;
+}
+
+input[type=submit], input[type=reset], .sendButton, .addButton{
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 10px;
+  vertical-align: top;
+  position: relative;
+  display: inline-block;
+}
+
+input[type=submit]:hover, input[type=reset]:hover, .sendButton:hover, .addButton:hover {
+  background-color: #45a049;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+.col-25 {
+  float: left;
+  width: 25%;
+  margin-top: 6px;
+}
+
+.col-75 {
+  float: left;
+  width: 75%;
+  margin-top: 6px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* 
+Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other
+@media screen and (max-width: 600px) {
+  .col-25, .col-75, input[type=submit] {
+    width: 100%;
+    margin-top: 0;
+  }
+}
+*/
+
+
+script
+
+</style>
+</head>
+<body>
+
+<button class="tablink" panel="tab-1" onclick="openPage('Home', this)" id="defaultOpen">menu</button>
+<button class="tablink" panel="tab-2" onclick="openPage('News', this)" >section 2</button>
+<button class="tablink" panel="tab-3" onclick="openPage('Contact', this)">section 3</button>
+<button class="tablink" panel="tab-4" onclick="openPage('About', this)">section 4</button>
+<button class="tablink" panel="tab-5" onclick="openPage('About', this)">section 5</button>
+
+					  
+	<span id="authorize_button">login</span>
+	<span id="signout_button" >logout</span>
+<div id="tab-1"  class="tabcontent">
+	<h3>menu</h3>
+	<div id="select-1"></div>
+</div>
+<div id="tab-2" class="tabcontent">
+  <h3>Section 2</h3>
+	<div id="select-2"></div>
+</div>
+<div id="tab-3" class="tabcontent">
+  <h3>Section 3</h3>
+	<div id="select-3"></div>
+</div>
+<div id="tab-4" class="tabcontent">
+  <h3>Section 4</h3>
+	<div id="select-4"></div>
+</div>
+<div id="tab-5" class="tabcontent">
+  <h3>Section 5</h3>
+	<div id="select-5"></div>
+</div>
+
+<script>
+
+	// Client ID and API key from the Developer Console
+	var CLIENT_ID = '1004087893143-1lekdqmu0h4aafoghtlirhb2a8edt12r.apps.googleusercontent.com';
+	var API_KEY = 'AIzaSyC4bQKjRbypPlpHuFaaT2z8bTpEguegXOQ ';
+
+	// Array of API discovery doc URLs for APIs used by the quickstart
+	var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
+
+	// Authorization scopes required by the API; multiple scopes can be
+	// included, separated by spaces.
+	var SCOPES = "https://www.googleapis.com/auth/spreadsheets";
+
+	var authorizeButton = document.getElementById('authorize_button');
+	var signoutButton = document.getElementById('signout_button');
+	
+	var pre = document.getElementById('content');
+	
+	var userList = ['corilito@gmail.com', 'open@ouskravena.org'];
+	
+	var signedUser = false;
+	
+
+	/**
+	*  On load, called to load the auth2 library and API client library.
+	*/
+	function handleClientLoad() {
+		gapi.load('client:auth2', initClient);
+	}
+
+	/**
+	*  Initializes the API client library and sets up sign-in state
+	*  listeners.
+	*/
+	function initClient() {
+		gapi.client.init({
+			apiKey: API_KEY,
+			clientId: CLIENT_ID,
+			discoveryDocs: DISCOVERY_DOCS,
+			scope: SCOPES
+		}).then(function () {
+			// Listen for sign-in state changes.
+			gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+			
+			// Handle the initial sign-in state.
+			updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+			authorizeButton.onclick = handleAuthClick;
+			signoutButton.onclick = handleSignoutClick;
+		}, function(error) {
+			appendPre(JSON.stringify(error, null, 2));
+		});
+	}
+
+	/**
+	*  Called when the signed in status changes, to update the UI
+	*  appropriately. After a sign-in, the API is called.
+	*/
+	function updateSigninStatus(isSignedIn) {
+		signedUser = isSignedIn;
+		if (isSignedIn) {
+			var thisUser = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getEmail();
+			var userFound = userList.indexOf(thisUser);
+			if(userFound != -1){thisUser
+				authorizeButton.style.display = 'none';
+				signoutButton.style.display = 'inline-block';
+				////jQuery('.form-row').show();
+				//listMajors();
+				//listMajorsa();
+				////////pullCells();
+				//dynamicallyLoadScript('js/cmshandle.js')
+			}
+		} else {
+			//gapi.auth2.getAuthInstance().signIn();
+			authorizeButton.style.display = 'inline-block';
+			signoutButton.style.display = 'none';
+			////jQuery('.form-row').hide();
+		}
+	}
+
+	/**
+	*  Sign in the user upon button click.
+	*/
+	function handleAuthClick(event) {
+		gapi.auth2.getAuthInstance().signIn();
+	}
+
+	/**
+	*  Sign out the user upon button click.
+	*/
+	function handleSignoutClick(event) {
+		//gapi.auth2.getAuthInstance().signOut().then(function (){ gapi.auth2.getAuthInstance().disconnect() });
+		gapi.auth2.getAuthInstance().signOut();
+	}
+
+	/**
+	* Append a pre element to the body containing the given message
+	* as its text node. Used to display the results of the API call.
+	*
+	* @param {string} message Text to be placed in pre element.
+	*/
+	function appendPre(message) {
+		var pre = document.getElementById('content');
+		var textContent = document.createTextNode(message + '\n');
+		jQuery(pre).append(textContent);
+	}
+	
+	
+	function dynamicallyLoadScript(url) {
+		var script = document.createElement("script");  // create a script DOM node
+		script.src = url;  // set its src to the provided URL
+		script.id = 'fetchHandler';
+		jQuery('body').append(script);  // add it to the end of the head section of the page (could change 'head' to 'body' to add it to the end of the body section instead)
+	}
+	function openPage(pageName,elmnt) {
+/*
+	  var i, tabcontent, tablinks;
+	  tabcontent = document.getElementsByClassName("tabcontent");
+	  for (i = 0; i < tabcontent.length; i++) {
+		tabcontent[i].style.display = "none";
+	  }
+	  tablinks = document.getElementsByClassName("tablink");
+	  for (i = 0; i < tablinks.length; i++) {
+		tablinks[i].style.backgroundColor = "";
+	  }
+	  document.getElementById(pageName).style.display = "block";
+	  elmnt.style.backgroundColor = '#fff';
+	  elmnt.style.color = '#000';
+*/
+	}
+	// Get the element with id="defaultOpen" and click on it
+
+	
+	
+
+   	jQuery('#defaultOpen').click( function(){
+		//sectionThree();
+	});
+	
+	
+	jQuery(document).ready(function(){
+		jQuery('.tablink').click(function(){
+			jQuery('.tabcontent').hide();
+			jQuery('#' + jQuery(this).attr('panel')).show();
+			jQuery('.tablink').css('background-color','');
+			jQuery(this).css('background-color','#fff');
+			//jQuery('#' + jQuery(this).attr('panel')).trigger('click');
+			var aaa = $(this).attr('panel');
+			if( aaa == "tab-3" ){
+				sectionThree();
+			} else if( aaa == "tab-4" ){ 
+				sectionFour();
+			} else if( aaa == "tab-5" ){ 
+				sectionFive();
+			} else if( aaa == "tab-1" ){ 
+				sectionOne();
+			} else if( aaa == "tab-2" ){ 
+				sectionTwo();
+			}
+		});
+		//jQuery('#defaultOpen').trigger('click');
+	});
+	
+	var currlang = 'en';
+	var newDivContent = ''	
+	var formLength = '';
+	
+	
+
+	
+	function sectionThree(){
+		//jQuery('#select-1 > div > div').remove();
+		jQuery('#select-3 > div').remove();
+
+		newDivContent = document.createElement('div');
+		jQuery(newDivContent).addClass('row justify-content-center pt-5').attr('id','s3_' + currlang + '-row');		
+			
+		var sheet3 = $.parseJSON($.ajax({
+			url:  "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/4/public/values?alt=json",
+			dataType: "json",
+			async: false
+		}).responseText).feed.entry;
+		formLength = parseInt( sheet3.length );
+		 
+		var newDiv = document.createElement('div');
+		jQuery(newDiv).addClass('container');
+		var newFormElement = document.createElement('form');
+		jQuery(newFormElement).attr('id', 's3_' + currlang + '-' + 0);
+		jQuery(newFormElement).attr('id', 's3_' + currlang + '-' + 0);
+		var newInputElement = document.createElement('input');
+		jQuery(newInputElement).attr('type','text');
+		jQuery(newInputElement).val('Title');
+		jQuery(newInputElement).attr('disabled','true');
+		jQuery(newFormElement).append(newInputElement);
+		var newInputElement = document.createElement('input');
+		jQuery(newInputElement).attr('type','text');
+		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$title']['$t']);
+		jQuery(newFormElement).append(newInputElement);
+		var newInputElement = document.createElement('textarea');
+		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$text']['$t']);
+		jQuery(newFormElement).append(newInputElement);
+		var newInputElement = document.createElement('span');
+		jQuery(newInputElement).addClass('sendButton');
+		jQuery(newInputElement).html('Send');
+		jQuery(newFormElement).append(newInputElement);
+		jQuery(newDivContent).append(newFormElement);
+		
+		for (i = 1; i < sheet3.length; i++) {	
+			var newFormElement = document.createElement('form');
+			jQuery(newFormElement).attr('id', 's3_' + currlang + '-' + i);
+			jQuery(newFormElement).attr('id', 's3_' + currlang + '-' + i);
+			
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$icon']['$t']);
+			jQuery(newFormElement).append(newInputElement);
+			
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$title']['$t']);
+			jQuery(newFormElement).append(newInputElement);
+			
+			var newInputElement = document.createElement('textarea');
+			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$text']['$t']);
+			jQuery(newFormElement).append(newInputElement);
+			
+			var newInputElement = document.createElement('span');
+			jQuery(newInputElement).addClass('sendButton');
+			jQuery(newInputElement).html('Send');
+			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivContent).append(newFormElement);
+		}
+		addNewForm('s3_');
+		//jQuery(newDiv).append(newDivContent);
+		//jQuery('#select-1').append(newDiv);
+		jQuery('#select-3').append(newDivContent);	
+	}
+	
+	
+	function sectionOne(){
+		//jQuery('#select-1 > div > div').remove();
+		jQuery('#select-1 > div').remove();
+
+		newDivContent = document.createElement('div');
+		jQuery(newDivContent).addClass('row justify-content-center pt-5').attr('id','s1_' + currlang + '-row');		
+			
+		var sheet3 = $.parseJSON($.ajax({
+			url:  "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/2/public/values?alt=json",
+			dataType: "json",
+			async: false
+		}).responseText).feed.entry;
+		formLength = parseInt( sheet3.length );
+		 
+		var newDiv = document.createElement('div');
+		jQuery(newDiv).addClass('container');
+		var newFormElement = document.createElement('form');
+		jQuery(newFormElement).attr('id', 's1_' + currlang + '-' + 0);
+		
+		var newInputElement = document.createElement('input');
+		jQuery(newInputElement).attr('type','text');
+		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$text']['$t']);
+		jQuery(newFormElement).append(newInputElement);
+		
+		var newInputElement = document.createElement('input');
+		jQuery(newInputElement).attr('type','text');
+		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$link']['$t']);
+		jQuery(newFormElement).append(newInputElement);
+		
+		var newInputElement = document.createElement('span');
+		jQuery(newInputElement).addClass('sendButton');
+		jQuery(newInputElement).html('Send');
+		jQuery(newFormElement).append(newInputElement);
+		jQuery(newDivContent).append(newFormElement);
+		
+		for (i = 1; i < sheet3.length; i++) {	
+			var newFormElement = document.createElement('form');
+			jQuery(newFormElement).attr('id', 's1_' + currlang + '-' + i);
+			
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$text']['$t']);
+			jQuery(newFormElement).append(newInputElement);
+			
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$link']['$t']);
+			jQuery(newFormElement).append(newInputElement);
+			
+			var newInputElement = document.createElement('span');
+			jQuery(newInputElement).addClass('sendButton');
+			jQuery(newInputElement).html('Send');
+			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivContent).append(newFormElement);
+		}
+		addNewForm('s1_');
+		//jQuery(newDiv).append(newDivContent);
+		//jQuery('#select-1').append(newDiv);
+		jQuery('#select-1').append(newDivContent);	
+	}
+	
+	
+	
+	
+	function sectionTwo(){
+		jQuery('#select-2 > div').remove();
+
+		newDivContent = document.createElement('div');
+		jQuery(newDivContent).addClass('row justify-content-center pt-5').attr('id','s2_' + currlang + '-row');		
+			
+		var sheet3 = $.parseJSON($.ajax({
+			url:  "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/3/public/values?alt=json",
+			dataType: "json",
+			async: false
+		}).responseText).feed.entry;
+		formLength = parseInt( sheet3.length );
+	/*	 
+		var newDiv = document.createElement('div');
+		jQuery(newDiv).addClass('container');
+		var newFormElement = document.createElement('form');
+		jQuery(newFormElement).attr('id', 's2_' + currlang + '-' + 0);
+		
+		var newInputElement = document.createElement('input');
+		jQuery(newInputElement).attr('type','text');
+		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$text']['$t']);
+		jQuery(newFormElement).append(newInputElement);
+		
+		var newInputElement = document.createElement('input');
+		jQuery(newInputElement).attr('type','text');
+		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$focus']['$t']);
+		jQuery(newFormElement).append(newInputElement);
+		
+		var newInputElement = document.createElement('input');
+		jQuery(newInputElement).attr('type','text');
+		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$timer']['$t']);
+		jQuery(newFormElement).append(newInputElement);
+		
+		var newInputElement = document.createElement('span');
+		jQuery(newInputElement).addClass('sendButton');
+		jQuery(newInputElement).html('Send');
+		jQuery(newFormElement).append(newInputElement);
+		jQuery(newDivContent).append(newFormElement);
+	*/	
+		for (i = 0; i < sheet3.length; i++) {	
+			var newFormElement = document.createElement('form');
+			jQuery(newFormElement).attr('id', 's2_' + currlang + '-' + i);
+			
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$text']['$t']);
+			if(i == 0 || i == 1 || i == 2 ){ jQuery(newInputElement).attr('disabled','true'); }
+			jQuery(newFormElement).append(newInputElement);
+			
+			
+			
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$focus']['$t']);
+			jQuery(newFormElement).append(newInputElement);
+			
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$timer']['$t']);
+			jQuery(newFormElement).append(newInputElement);
+			
+			var newInputElement = document.createElement('span');
+			jQuery(newInputElement).addClass('sendButton');
+			jQuery(newInputElement).html('Send');
+			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivContent).append(newFormElement);
+		}
+		addNewForm('s2_');
+		jQuery('#select-2').append(newDivContent);	
+	}
+	
+	
+	
+	
+	
+	
+	function sectionFour(){
+		//jQuery('#select-1 > div > div').remove();
+		jQuery('#select-4 > div').remove();
+		
+		newDivContent = document.createElement('div');
+		jQuery(newDivContent).addClass('row justify-content-center pt-5').attr('id','s4_' + currlang + '-row');		
+			
+		var sheet3 = $.parseJSON($.ajax({
+			url:  "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/5/public/values?alt=json",
+			dataType: "json",
+			async: false
+		}).responseText).feed.entry;
+		
+		formLength = parseInt( sheet3.length );
+	
+		var newDiv = document.createElement('div');
+		jQuery(newDiv).addClass('container');
+		var newFormElement = document.createElement('form');
+		jQuery(newFormElement).attr('id', 's4_' + currlang + '-' + 0);
+		
+		var newInputElement = document.createElement('input');
+		jQuery(newInputElement).attr('type','text');
+		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$title']['$t']);
+		jQuery(newFormElement).append(newInputElement);
+		
+		var newInputElement = document.createElement('textarea');
+		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$text']['$t']);
+		jQuery(newFormElement).append(newInputElement);
+		
+		var newInputElement = document.createElement('span');
+		jQuery(newInputElement).addClass('sendButton');
+		jQuery(newInputElement).html('Send');
+		jQuery(newFormElement).append(newInputElement);
+		jQuery(newDivContent).append(newFormElement);
+	
+		for (i = 1; i < sheet3.length; i++) {	
+		
+			var newFormElement = document.createElement('form');
+			jQuery(newFormElement).attr('id', 's4_' + currlang + '-' + i);
+			
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$title']['$t']);
+			jQuery(newFormElement).append(newInputElement);
+			
+			var newInputElement = document.createElement('textarea');
+			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$text']['$t']);
+			jQuery(newFormElement).append(newInputElement);
+			
+			var newInputElement = document.createElement('span');
+			jQuery(newInputElement).addClass('sendButton');
+			jQuery(newInputElement).html('Send');
+			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivContent).append(newFormElement);
+		}
+		addNewForm('s4_');
+		//jQuery(newDiv).append(newDivContent);
+		//jQuery('#select-1').append(newDiv);
+		jQuery('#select-4').append(newDivContent);
+	}
+	
+	
+	
+	
+	
+	
+	function sectionFive(){
+		//jQuery('#select-2 > div > div').remove();
+		jQuery('#select-5 > div').remove();
+		
+		newDivContent = document.createElement('div');
+		jQuery(newDivContent).addClass('row justify-content-center pt-5').attr('id','s5_' + currlang + '-row');		
+	
+		var sheet5 = $.parseJSON($.ajax({
+			url:  "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/18/public/values?alt=json",
+			dataType: "json",
+			async: false
+		}).responseText).feed.entry;
+		
+		 formLength = parseInt( sheet5.length );
+	
+		var newDiv = document.createElement('div');
+		jQuery(newDiv).addClass('container');
+		var newFormElement = document.createElement('form');
+		jQuery(newFormElement).attr('id', 's5_' + currlang + '-' + 0);
+		var newInputElement = document.createElement('input');
+		jQuery(newInputElement).attr('type','text');
+		jQuery(newInputElement).val(jQuery(sheet5)[0]['gsx$title']['$t']);
+		jQuery(newFormElement).append(newInputElement);
+		var newInputElement = document.createElement('textarea');
+		jQuery(newInputElement).val(jQuery(sheet5)[0]['gsx$text']['$t']);
+		jQuery(newFormElement).append(newInputElement);
+		var newInputElement = document.createElement('input');
+		jQuery(newInputElement).attr('type','text');
+		jQuery(newInputElement).val(jQuery(sheet5)[0]['gsx$link']['$t']);
+		jQuery(newFormElement).append(newInputElement);
+		var newInputElement = document.createElement('input');
+		jQuery(newInputElement).attr('type','text');
+		jQuery(newInputElement).val(jQuery(sheet5)[0]['gsx$badge']['$t']);
+		jQuery(newFormElement).append(newInputElement);
+		var newInputElement = document.createElement('span');
+		jQuery(newInputElement).addClass('sendButton');
+		jQuery(newInputElement).html('Send');
+		jQuery(newFormElement).append(newInputElement);
+		jQuery(newDivContent).append(newFormElement);
+	
+		for (i = 1; i < sheet5.length; i++) {
+		
+			var newFormElement = document.createElement('form');
+			jQuery(newFormElement).attr('id', 's5_' + currlang + '-' + i);
+			
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet5)[i]['gsx$icon']['$t']);
+			jQuery(newFormElement).append(newInputElement);
+			
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet5)[i]['gsx$title']['$t']);
+			jQuery(newFormElement).append(newInputElement);
+			
+			var newInputElement = document.createElement('textarea');
+			jQuery(newInputElement).val(jQuery(sheet5)[i]['gsx$text']['$t']);
+			jQuery(newFormElement).append(newInputElement);
+			
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet5)[i]['gsx$link']['$t']);
+			jQuery(newFormElement).append(newInputElement);
+			
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet5)[i]['gsx$badge']['$t']);
+			jQuery(newFormElement).append(newInputElement);
+			
+			var newInputElement = document.createElement('span');
+			jQuery(newInputElement).addClass('sendButton');
+			jQuery(newInputElement).html('Send');
+			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivContent).append(newFormElement);
+		}
+		addNewForm('s5_');
+		jQuery(newDiv).append(newDivContent);
+		jQuery('#select-5').append(newDiv);
+		
+	}
+		
+	function addNewForm(page){
+		var newFormElement = document.createElement('form');
+		jQuery(newFormElement).attr('id', page + currlang + '-' + formLength);
+		
+		if(page == 's3_'){
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newFormElement).append(newInputElement);
+		}
+		
+		var newInputElement = document.createElement('input');
+		jQuery(newInputElement).attr('type','text');
+		jQuery(newFormElement).append(newInputElement);
+		
+		if(page == 's1_'){
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newFormElement).append(newInputElement);
+		} else	if(page == 's2_'){
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newFormElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newFormElement).append(newInputElement);
+		} else {
+			var newInputElement = document.createElement('textarea');
+			jQuery(newFormElement).append(newInputElement);
+		} 
+		 
+		var newInputElement = document.createElement('span');
+		jQuery(newInputElement).addClass('addButton');
+		jQuery(newInputElement).html('Add');
+		jQuery(newFormElement).append(newInputElement);
+		jQuery(newDivContent).append(newFormElement);
+		formLength++;
+		//triggerAddButton();
+	}
+	
+	function updateCellsEntries(data, edit) {
+		
+		var contId = data.attr('id');
+		data = data[0];
+		var sheetName = contId.split('-')[0];
+		var rowID = parseInt(contId.split('-')[1]) + 1;
+		var theRange = sheetName + '!A' + ( parseInt(rowID) + 1) + ':F';
+		
+		var vals = [[]];
+		//vals[0].push( ( parseInt(rowID) - 1) );
+		vals[0].push( '' );
+		
+		for(var i = 0 ; i < data.elements.length ; i++){
+			var item = data.elements.item(i);
+			//if(data.elements.item(i).value == ''){ return null; }
+			if( item.type == 'textarea' || item.type == 'text' || item.type == 'hidden'){
+				vals[0].push(data.elements.item(i).value);
+			}
+			if(  item.type == 'select-one' ){
+				vals[0].push('mbr-iconfont ' + data.elements.item(i).value);
+			}
+		}
+		
+		var valueRangeBody = {
+			"values": vals
+		};
+		
+		gapi.client.sheets.spreadsheets.values.update({
+			spreadsheetId: '1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo',
+			range: theRange,
+			valueInputOption: 'RAW',
+			resource : valueRangeBody
+		}).then(function(response) {
+			var result = response.result;
+			//console.log(response);
+			//console.log(response.status);
+		/*
+			if( response.statusText ){
+				if(contId.split('-')[1] == 'h2'){
+					document.getElementById(contId).firstChild.nodeValue = vals[0][2];
+					document.getElementById( contId.split('-')[0] + '-h3' ).innerHTML = vals[0][3];
+				} else {
+					if(edit){
+						jQuery('#' + contId ).find('.mbr-iconfont').eq(2).attr('class', vals[0][1] );
+						if(theRange[1] == 5){ jQuery('#' + contId ).find('.mbr-iconfont').eq(2).addClass('icon-wrapper'); }
+					} else {
+						jQuery('#' + contId ).find('.mbr-iconfont').eq(0).attr('class', vals[0][1] );
+						if(theRange[1] == 5){ jQuery('#' + contId ).find('.mbr-iconfont').eq(0).addClass('icon-wrapper'); }
+					}
+					jQuery('#' + contId + ' h4').html( vals[0][2] );
+					jQuery('#' + contId + ' p').html( vals[0][3] );
+				}
+			}
+		*/
+			if(response.status = 200){
+				if($(data).find('span').html() == "Add"){
+					$(data).find('span').html("Send");
+					addNewForm();
+				}
+			}
+			return response;
+		}, function(reason) {
+			console.error('error: ' + reason.result.error.message);
+		});
+		//console.log(data.textContent = 123);
+		//console.log($(data).find('.addButton'));
+		//$(document).find('.addButton').html('Send');
+		//addNewForm();
+		
+	}
+		
+		//sectionThree();
+		
+		jQuery(document).ready(function(){
+			jQuery(document).on('click', '.sendButton, .addButton', function(e) {
+			//jQuery('.sendButton, .addButton').on('click', function() {
+				//jQuery(this).closest('form').submit();
+				updateCellsEntries( jQuery(this).closest('form'), true);
+			});
+		});
+		
+		/*
+		function triggerAddButton(){
+			jQuery('.addButton').on('click', function() {
+				addNewForm();
+				jQuery(this).addClass('sendButton');
+				jQuery(this).removeClass('addButton');
+				jQuery(this).html('Send');
+				
+				
+				
+				jQuery(this).closest('form > input, form > textarea').each(function() {
+				   if(jQuery(this).val() === "")
+					alert("Empty Fields!!");
+				});
+			});
+		}
+		
+		triggerAddButton();
+		*/
+		
+
+		
+		
+</script>
+   
+   
+   
+   
+<script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>
+
+
+
+</body>
+</html> 

@@ -41,10 +41,30 @@
 	.ppre{left: 10px;}
 	.flag-container{position: absolute; right: 65px; top: 30px; font-size: 20px;}
 	.flag-elemnt{position: relative; top: 0; left: 0; float: right; margin-left: 5px; cursor: pointer;}
-	
 	#zoom_controls button{width: 30px; height: 30px;}
-	
-	
+	@media only screen and (max-width: 1024px) { 
+		.brand-text{
+			width: 100%;
+			font-size: 4vw!important;
+			float: left;
+		}
+		.navbar-brand.white {
+			position:fixed;
+			left: 0px;
+			top: 0px;
+			padding: 5px;
+			width: 80vw;
+		}
+		.flag-container{
+			top: 5px; right: 10px; z-index: 10000;
+		}
+		#nav-icon {
+			position: fixed;
+			top: 40px;
+			right: -5px;
+		}
+		#home{top: 0px}
+	}
 	
   </style>
   
@@ -110,8 +130,8 @@
           
           <!-- logo --> 
           <a class="navbar-brand white" href="index.html">
-          <img class="white" alt="logo" src="img/logo.svg"><span class="brand-text">Oportunities in the Puzle of Ethnic Needs</span>
-          <img class="black" alt="logo" src="img/logo.svg">
+          <img class="white" alt="logo" src="img/logo.svg">
+          <img class="black" alt="logo" src="img/logo.svg"><span class="brand-text">Oportunities in the Puzle of Ethnic Needs</span>
           </a> 
           <!-- logo end -->
           
