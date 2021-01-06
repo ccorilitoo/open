@@ -3,6 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 <style>
 * {box-sizing: border-box}
 
@@ -37,40 +38,45 @@ body, html {
 }
 
 form{
-	margin: 20px auto;
+	/*margin: 20px auto;*/
 }
 
 input[type=text], select, textarea {
-  width: 15%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  vertical-align: top;
-  margin: 10px;
+width: 100%;
+padding: 5px;
+border: 1px solid #ccc;
+border-radius: 4px;
+vertical-align: top;
+margin: 0;
 }
 
 textarea{
+	/*
 	width: 25%;
+	*/
 	height: 100px;
 	resize: none;
 }
 
 label {
-  padding: 12px 12px 12px 0;
-  display: inline-block;
+padding: 0;
+margin: 0;
+font-size: 12px;
 }
 
 input[type=submit], input[type=reset], .sendButton, .addButton{
   background-color: #4CAF50;
   color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 10px;
-  vertical-align: top;
-  position: relative;
-  display: inline-block;
+padding: 5px 10px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+margin: 24px 0 0 0;
+vertical-align: top;
+position: relative;
+display: block;
+text-align: center;
+max-width: 100px;
 }
 
 input[type=submit]:hover, input[type=reset]:hover, .sendButton:hover, .addButton:hover {
@@ -112,18 +118,28 @@ Responsive layout - when the screen is less than 600px wide, make the two column
 }
 */
 
-
-script
+.container{
+max-width: 100%;
+padding: 0;
+margin: 0;
+background: none;
+}
 
 </style>
 </head>
 <body>
+
+
+
 
 <button class="tablink" panel="tab-1" onclick="openPage('Home', this)" id="defaultOpen">menu</button>
 <button class="tablink" panel="tab-2" onclick="openPage('News', this)" >section 2</button>
 <button class="tablink" panel="tab-3" onclick="openPage('Contact', this)">section 3</button>
 <button class="tablink" panel="tab-4" onclick="openPage('About', this)">section 4</button>
 <button class="tablink" panel="tab-5" onclick="openPage('About', this)">section 5</button>
+<button class="tablink" panel="tab-6" onclick="openPage('About', this)">section 6</button>
+<button class="tablink" panel="tab-7" onclick="openPage('About', this)">section 7</button>
+<button class="tablink" panel="tab-8" onclick="openPage('About', this)">section 8</button>
 
 					  
 	<span id="authorize_button">login</span>
@@ -132,21 +148,48 @@ script
 	<h3>menu</h3>
 	<div id="select-1"></div>
 </div>
+</div>
 <div id="tab-2" class="tabcontent">
   <h3>Section 2</h3>
+  <div class="container">
 	<div id="select-2"></div>
+</div>
 </div>
 <div id="tab-3" class="tabcontent">
   <h3>Section 3</h3>
+  <div class="container">
 	<div id="select-3"></div>
+</div>
 </div>
 <div id="tab-4" class="tabcontent">
   <h3>Section 4</h3>
+  <div class="container">
 	<div id="select-4"></div>
+</div>
 </div>
 <div id="tab-5" class="tabcontent">
   <h3>Section 5</h3>
+  <div class="container">
 	<div id="select-5"></div>
+</div>
+</div>
+<div id="tab-6" class="tabcontent">
+  <h3>Section 6</h3>
+  <div class="container">
+	<div id="select-6"></div>
+</div>
+</div>
+<div id="tab-7" class="tabcontent">
+  <h3>Section 7</h3>
+  <div class="container">
+	<div id="select-7"></div>
+</div>
+</div>
+<div id="tab-8" class="tabcontent">
+  <h3>Section 8</h3>
+  <div class="container">
+	<div id="select-8"></div>
+  </div>
 </div>
 
 <script>
@@ -291,9 +334,12 @@ script
 	jQuery(document).ready(function(){
 		jQuery('.tablink').click(function(){
 			jQuery('.tabcontent').hide();
+			jQuery('.tabcontent > div > div > div').html('');
 			jQuery('#' + jQuery(this).attr('panel')).show();
 			jQuery('.tablink').css('background-color','');
+			jQuery('.tablink').css('box-shadow','');
 			jQuery(this).css('background-color','#fff');
+			jQuery(this).css('box-shadow','inset 0px -6px 4px 0px #888');
 			//jQuery('#' + jQuery(this).attr('panel')).trigger('click');
 			var aaa = $(this).attr('panel');
 			if( aaa == "tab-3" ){
@@ -301,11 +347,17 @@ script
 			} else if( aaa == "tab-4" ){ 
 				sectionFour();
 			} else if( aaa == "tab-5" ){ 
-				sectionFive();
+				sectionBooks();
 			} else if( aaa == "tab-1" ){ 
 				sectionOne();
 			} else if( aaa == "tab-2" ){ 
 				sectionTwo();
+			} else if( aaa == "tab-7" ){ 
+				sectionSeven();
+			} else if( aaa == "tab-6" ){ 
+				sectionSix();
+			} else if( aaa == "tab-8" ){ 
+				sectionEight();
 			}
 		});
 		//jQuery('#defaultOpen').trigger('click');
@@ -323,7 +375,7 @@ script
 		jQuery('#select-3 > div').remove();
 
 		newDivContent = document.createElement('div');
-		jQuery(newDivContent).addClass('row justify-content-center pt-5').attr('id','s3_' + currlang + '-row');		
+		jQuery(newDivContent).attr('id','s3_' + currlang + '-row');		
 			
 		var sheet3 = $.parseJSON($.ajax({
 			url:  "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/4/public/values?alt=json",
@@ -335,49 +387,84 @@ script
 		var newDiv = document.createElement('div');
 		jQuery(newDiv).addClass('container');
 		var newFormElement = document.createElement('form');
-		jQuery(newFormElement).attr('id', 's3_' + currlang + '-' + 0);
-		jQuery(newFormElement).attr('id', 's3_' + currlang + '-' + 0);
-		var newInputElement = document.createElement('input');
-		jQuery(newInputElement).attr('type','text');
-		jQuery(newInputElement).val('Title');
-		jQuery(newInputElement).attr('disabled','true');
-		jQuery(newFormElement).append(newInputElement);
+		jQuery(newFormElement).attr('id', 's3_' + currlang + '-' + 0).addClass('row');
+		
+		
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('text');
+			jQuery(newDivElement).append(newInputElement);
 		var newInputElement = document.createElement('input');
 		jQuery(newInputElement).attr('type','text');
 		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$title']['$t']);
-		jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+		
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('text');
+			jQuery(newDivElement).append(newInputElement);
 		var newInputElement = document.createElement('textarea');
 		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$text']['$t']);
-		jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+		
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');
 		var newInputElement = document.createElement('span');
 		jQuery(newInputElement).addClass('sendButton');
 		jQuery(newInputElement).html('Send');
-		jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 		jQuery(newDivContent).append(newFormElement);
 		
 		for (i = 1; i < sheet3.length; i++) {	
 			var newFormElement = document.createElement('form');
-			jQuery(newFormElement).attr('id', 's3_' + currlang + '-' + i);
-			jQuery(newFormElement).attr('id', 's3_' + currlang + '-' + i);
+			jQuery(newFormElement).attr('id', 's3_' + currlang + '-' + i).addClass('row');
 			
+			/*
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('text');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('input');
 			jQuery(newInputElement).attr('type','text');
 			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$icon']['$t']);
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			*/
 			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('text');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('input');
 			jQuery(newInputElement).attr('type','text');
 			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$title']['$t']);
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('text');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('textarea');
 			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$text']['$t']);
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
 			var newInputElement = document.createElement('span');
 			jQuery(newInputElement).addClass('sendButton');
 			jQuery(newInputElement).html('Send');
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 			jQuery(newDivContent).append(newFormElement);
 		}
 		addNewForm('s3_');
@@ -392,7 +479,7 @@ script
 		jQuery('#select-1 > div').remove();
 
 		newDivContent = document.createElement('div');
-		jQuery(newDivContent).addClass('row justify-content-center pt-5').attr('id','s1_' + currlang + '-row');		
+		jQuery(newDivContent).attr('id','s1_' + currlang + '-row');		
 			
 		var sheet3 = $.parseJSON($.ajax({
 			url:  "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/2/public/values?alt=json",
@@ -404,42 +491,76 @@ script
 		var newDiv = document.createElement('div');
 		jQuery(newDiv).addClass('container');
 		var newFormElement = document.createElement('form');
-		jQuery(newFormElement).attr('id', 's1_' + currlang + '-' + 0);
+		jQuery(newFormElement).attr('id', 's1_' + currlang + '-' + 0).addClass('row');
 		
+		
+		
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('text');
+			jQuery(newDivElement).append(newInputElement);
 		var newInputElement = document.createElement('input');
 		jQuery(newInputElement).attr('type','text');
 		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$text']['$t']);
-		jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 		
+		
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('anchor');
+			jQuery(newDivElement).append(newInputElement);
 		var newInputElement = document.createElement('input');
 		jQuery(newInputElement).attr('type','text');
 		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$link']['$t']);
-		jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 		
+		
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
 		var newInputElement = document.createElement('span');
 		jQuery(newInputElement).addClass('sendButton');
 		jQuery(newInputElement).html('Send');
-		jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 		jQuery(newDivContent).append(newFormElement);
 		
 		for (i = 1; i < sheet3.length; i++) {	
 			var newFormElement = document.createElement('form');
-			jQuery(newFormElement).attr('id', 's1_' + currlang + '-' + i);
+			jQuery(newFormElement).attr('id', 's1_' + currlang + '-' + i).addClass('row');
 			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('Heading');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('input');
-			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).attr('type','text').addClass('col-25');
 			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$text']['$t']);
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('Heading');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('input');
 			jQuery(newInputElement).attr('type','text');
 			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$link']['$t']);
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
 			var newInputElement = document.createElement('span');
 			jQuery(newInputElement).addClass('sendButton');
 			jQuery(newInputElement).html('Send');
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 			jQuery(newDivContent).append(newFormElement);
 		}
 		addNewForm('s1_');
@@ -455,67 +576,62 @@ script
 		jQuery('#select-2 > div').remove();
 
 		newDivContent = document.createElement('div');
-		jQuery(newDivContent).addClass('row justify-content-center pt-5').attr('id','s2_' + currlang + '-row');		
+		jQuery(newDivContent).attr('id','s2_' + currlang + '-row');		
 			
 		var sheet3 = $.parseJSON($.ajax({
 			url:  "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/3/public/values?alt=json",
 			dataType: "json",
 			async: false
 		}).responseText).feed.entry;
-		formLength = parseInt( sheet3.length );
-	/*	 
-		var newDiv = document.createElement('div');
-		jQuery(newDiv).addClass('container');
-		var newFormElement = document.createElement('form');
-		jQuery(newFormElement).attr('id', 's2_' + currlang + '-' + 0);
-		
-		var newInputElement = document.createElement('input');
-		jQuery(newInputElement).attr('type','text');
-		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$text']['$t']);
-		jQuery(newFormElement).append(newInputElement);
-		
-		var newInputElement = document.createElement('input');
-		jQuery(newInputElement).attr('type','text');
-		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$focus']['$t']);
-		jQuery(newFormElement).append(newInputElement);
-		
-		var newInputElement = document.createElement('input');
-		jQuery(newInputElement).attr('type','text');
-		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$timer']['$t']);
-		jQuery(newFormElement).append(newInputElement);
-		
-		var newInputElement = document.createElement('span');
-		jQuery(newInputElement).addClass('sendButton');
-		jQuery(newInputElement).html('Send');
-		jQuery(newFormElement).append(newInputElement);
-		jQuery(newDivContent).append(newFormElement);
-	*/	
+		formLength = parseInt( sheet3.length );	
 		for (i = 0; i < sheet3.length; i++) {	
 			var newFormElement = document.createElement('form');
-			jQuery(newFormElement).attr('id', 's2_' + currlang + '-' + i);
+			jQuery(newFormElement).attr('id', 's2_' + currlang + '-' + i).addClass('row');
 			
+			if(i > 2 ){
+				
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('title');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('input');
 			jQuery(newInputElement).attr('type','text');
 			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$text']['$t']);
-			if(i == 0 || i == 1 || i == 2 ){ jQuery(newInputElement).attr('disabled','true'); }
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			}
 			
 			
-			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('text');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('input');
 			jQuery(newInputElement).attr('type','text');
 			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$focus']['$t']);
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('time');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('input');
 			jQuery(newInputElement).attr('type','text');
 			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$timer']['$t']);
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	;
 			var newInputElement = document.createElement('span');
 			jQuery(newInputElement).addClass('sendButton');
 			jQuery(newInputElement).html('Send');
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 			jQuery(newDivContent).append(newFormElement);
 		}
 		addNewForm('s2_');
@@ -524,15 +640,51 @@ script
 	
 	
 	
-	
-	
+	function sectionBooks(){
+		jQuery('#select-5	 > div').remove();
+
+		newDivContent = document.createElement('div');
+		jQuery(newDivContent).addClass('row justify-content-center pt-5').attr('id','s5_' + currlang + '-row');		
+			
+		var sheet3 = $.parseJSON($.ajax({
+			url:  "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/33/public/values?alt=json",
+			dataType: "json",
+			async: false
+		}).responseText).feed.entry;
+		formLength = parseInt( sheet3.length );	
+		for (i = 0; i < sheet3.length; i++) {	
+			var newFormElement = document.createElement('form');
+			jQuery(newFormElement).attr('id', 's2_' + currlang + '-' + i).addClass('row');
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('subitle');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$text']['$t']);
+			if(i == 0 || i == 1 || i == 2 ){ jQuery(newInputElement).attr('disabled','true'); }
+			jQuery(newFormElement).append(newInputElement);
+			
+			
+			
+			var newInputElement = document.createElement('span');
+			jQuery(newInputElement).addClass('sendButton');
+			jQuery(newInputElement).html('Send');
+			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivContent).append(newFormElement);
+		}
+		addNewForm('s2_');
+		jQuery('#select-5').append(newDivContent);	
+	}
 	
 	function sectionFour(){
 		//jQuery('#select-1 > div > div').remove();
 		jQuery('#select-4 > div').remove();
 		
 		newDivContent = document.createElement('div');
-		jQuery(newDivContent).addClass('row justify-content-center pt-5').attr('id','s4_' + currlang + '-row');		
+		jQuery(newDivContent).attr('id','s4_' + currlang + '-row');		
 			
 		var sheet3 = $.parseJSON($.ajax({
 			url:  "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/5/public/values?alt=json",
@@ -545,41 +697,73 @@ script
 		var newDiv = document.createElement('div');
 		jQuery(newDiv).addClass('container');
 		var newFormElement = document.createElement('form');
-		jQuery(newFormElement).attr('id', 's4_' + currlang + '-' + 0);
+		jQuery(newFormElement).attr('id', 's4_' + currlang + '-' + 0).addClass('row');
 		
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('title');
+			jQuery(newDivElement).append(newInputElement);
 		var newInputElement = document.createElement('input');
 		jQuery(newInputElement).attr('type','text');
 		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$title']['$t']);
-		jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 		
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('subitle');
+			jQuery(newDivElement).append(newInputElement);
 		var newInputElement = document.createElement('textarea');
 		jQuery(newInputElement).val(jQuery(sheet3)[0]['gsx$text']['$t']);
-		jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 		
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
 		var newInputElement = document.createElement('span');
 		jQuery(newInputElement).addClass('sendButton');
 		jQuery(newInputElement).html('Send');
-		jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 		jQuery(newDivContent).append(newFormElement);
 	
 		for (i = 1; i < sheet3.length; i++) {	
 		
 			var newFormElement = document.createElement('form');
-			jQuery(newFormElement).attr('id', 's4_' + currlang + '-' + i);
+			jQuery(newFormElement).attr('id', 's4_' + currlang + '-' + i).addClass('row');
 			
+			
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('title');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('input');
 			jQuery(newInputElement).attr('type','text');
 			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$title']['$t']);
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('html body');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('textarea');
-			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$text']['$t']);
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newInputElement).val(jQuery(sheet3)[i]['gsx$text']['$t'])
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');
 			var newInputElement = document.createElement('span');
 			jQuery(newInputElement).addClass('sendButton');
 			jQuery(newInputElement).html('Send');
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);;
 			jQuery(newDivContent).append(newFormElement);
 		}
 		addNewForm('s4_');
@@ -588,126 +772,1039 @@ script
 		jQuery('#select-4').append(newDivContent);
 	}
 	
-	
-	
-	
-	
-	
 	function sectionFive(){
 		//jQuery('#select-2 > div > div').remove();
 		jQuery('#select-5 > div').remove();
 		
 		newDivContent = document.createElement('div');
-		jQuery(newDivContent).addClass('row justify-content-center pt-5').attr('id','s5_' + currlang + '-row');		
+		jQuery(newDivContent).addClass('').attr('id','s5_' + currlang + '-row');		
 	
 		var sheet5 = $.parseJSON($.ajax({
-			url:  "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/18/public/values?alt=json",
+			url:  "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/6/public/values?alt=json",
 			dataType: "json",
 			async: false
 		}).responseText).feed.entry;
 		
 		 formLength = parseInt( sheet5.length );
-	
-		var newDiv = document.createElement('div');
-		jQuery(newDiv).addClass('container');
+		 
 		var newFormElement = document.createElement('form');
-		jQuery(newFormElement).attr('id', 's5_' + currlang + '-' + 0);
-		var newInputElement = document.createElement('input');
+		jQuery(newFormElement).attr('id', 's5_' + currlang + '-' + 0).addClass('row');
+		/* var newInputElement = document.createElement('input');
 		jQuery(newInputElement).attr('type','text');
-		jQuery(newInputElement).val(jQuery(sheet5)[0]['gsx$title']['$t']);
-		jQuery(newFormElement).append(newInputElement);
-		var newInputElement = document.createElement('textarea');
-		jQuery(newInputElement).val(jQuery(sheet5)[0]['gsx$text']['$t']);
-		jQuery(newFormElement).append(newInputElement);
-		var newInputElement = document.createElement('input');
-		jQuery(newInputElement).attr('type','text');
-		jQuery(newInputElement).val(jQuery(sheet5)[0]['gsx$link']['$t']);
-		jQuery(newFormElement).append(newInputElement);
-		var newInputElement = document.createElement('input');
-		jQuery(newInputElement).attr('type','text');
-		jQuery(newInputElement).val(jQuery(sheet5)[0]['gsx$badge']['$t']);
-		jQuery(newFormElement).append(newInputElement);
-		var newInputElement = document.createElement('span');
-		jQuery(newInputElement).addClass('sendButton');
-		jQuery(newInputElement).html('Send');
-		jQuery(newFormElement).append(newInputElement);
-		jQuery(newDivContent).append(newFormElement);
+		jQuery(newInputElement).val('Title');
+		jQuery(newInputElement).attr('disabled','true');	
+		jQuery(newFormElement).append(newInputElement) */;
+		
+		
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('title');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet5)[0]['gsx$title']['$t']);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+
+
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('text');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('textarea');
+			jQuery(newInputElement).val(jQuery(sheet5)[0]['gsx$text']['$t']);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+
+
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');
+			var newInputElement = document.createElement('span');
+			jQuery(newInputElement).addClass('sendButton');
+			jQuery(newInputElement).html('Send');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			jQuery(newDivContent).append(newFormElement);
 	
 		for (i = 1; i < sheet5.length; i++) {
 		
 			var newFormElement = document.createElement('form');
-			jQuery(newFormElement).attr('id', 's5_' + currlang + '-' + i);
+			jQuery(newFormElement).attr('id', 's5_' + currlang + '-' + i).addClass('row');;
+/* 			
 			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-2');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('title');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('input');
 			jQuery(newInputElement).attr('type','text');
 			jQuery(newInputElement).val(jQuery(sheet5)[i]['gsx$icon']['$t']);
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-2');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('title');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('input');
 			jQuery(newInputElement).attr('type','text');
 			jQuery(newInputElement).val(jQuery(sheet5)[i]['gsx$title']['$t']);
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 			
+			
+			
+			 */
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newDivElementRow = document.createElement('div');
+			jQuery(newDivElementRow).addClass('row');
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('icon');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet5)[0]['gsx$icon']['$t']);
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('title');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet5)[0]['gsx$title']['$t']);
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			jQuery(newDivElement).append(newDivElementRow);
+			jQuery(newFormElement).append(newDivElement);
+			
+			
+			
+			
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('text');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('textarea');
 			jQuery(newInputElement).val(jQuery(sheet5)[i]['gsx$text']['$t']);
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 			
+			/* 
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-2');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('title');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('input');
 			jQuery(newInputElement).attr('type','text');
 			jQuery(newInputElement).val(jQuery(sheet5)[i]['gsx$link']['$t']);
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
 			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-2');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('title');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('input');
 			jQuery(newInputElement).attr('type','text');
 			jQuery(newInputElement).val(jQuery(sheet5)[i]['gsx$badge']['$t']);
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			 */
 			
+			
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newDivElementRow = document.createElement('div');
+			jQuery(newDivElementRow).addClass('row');
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('link');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet5)[0]['gsx$link']['$t']);
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('bagde');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet5)[0]['gsx$badge']['$t']);
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			jQuery(newDivElement).append(newDivElementRow);
+			jQuery(newFormElement).append(newDivElement);
+			
+			
+			
+			
+			
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
 			var newInputElement = document.createElement('span');
 			jQuery(newInputElement).addClass('sendButton');
 			jQuery(newInputElement).html('Send');
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			//jQuery(newFormElement).find('input').css('width','13%');
+			//jQuery(newFormElement).find('textarea').css('width','13%');
 			jQuery(newDivContent).append(newFormElement);
 		}
 		addNewForm('s5_');
-		jQuery(newDiv).append(newDivContent);
-		jQuery('#select-5').append(newDiv);
+		jQuery('#select-5').append(newDivContent);
+	}
+	
+	function sectionSix(){
+		//jQuery('#select-2 > div > div').remove();
+		jQuery('#select-6 > div').remove();
 		
+		newDivContent = document.createElement('div');
+		jQuery(newDivContent).addClass('').attr('id','s6_' + currlang + '-row');		
+	
+		var sheet6 = $.parseJSON($.ajax({
+			url:  "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/7/public/values?alt=json",
+			dataType: "json",
+			async: false
+		}).responseText).feed.entry;
+		
+		console.log()
+		
+		formLength = parseInt( sheet6.length );
+	
+	
+		var newFormElement = document.createElement('form');
+		jQuery(newFormElement).attr('id', 's6_' + currlang + '-' + 0);
+		
+	
+		for (i = 0; i < sheet6.length; i++) {
+			var newFormElement = document.createElement('form');
+			jQuery(newFormElement).attr('id', 's6_' + currlang + '-' + i).addClass('row');
+			
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('title');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet6)[i]['gsx$title']['$t']);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('quote');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet6)[i]['gsx$quote']['$t']);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			
+			
+			
+			
+			/*
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('Heading');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet6)[i]['gsx$small']['$t']);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('Heading');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet6)[i]['gsx$smallcolor']['$t']);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			*/
+			
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newDivElementRow = document.createElement('div');
+			jQuery(newDivElementRow).addClass('row');
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('small');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet6)[0]['gsx$small']['$t']);
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('small color');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet6)[0]['gsx$smallcolor']['$t']);
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			jQuery(newDivElement).append(newDivElementRow);
+			jQuery(newFormElement).append(newDivElement);
+			
+			
+			
+			
+			
+			
+			
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	;
+			var newInputElement = document.createElement('span');
+			jQuery(newInputElement).addClass('sendButton');
+			jQuery(newInputElement).html('Send');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			jQuery(newDivContent).append(newFormElement);
+		}
+		addNewForm('s6_');
+		jQuery('#select-6').append(newDivContent);
 	}
 		
-	function addNewForm(page){
-		var newFormElement = document.createElement('form');
-		jQuery(newFormElement).attr('id', page + currlang + '-' + formLength);
+	function sectionSeven(){
+		//jQuery('#select-2 > div > div').remove();
+		jQuery('#select-6 > div').remove();
 		
-		if(page == 's3_'){
+		newDivContent = document.createElement('div');
+		jQuery(newDivContent).addClass('').attr('id','s7_' + currlang + '-row');		
+	
+		var sheet7 = $.parseJSON($.ajax({
+			url:  "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/8/public/values?alt=json",
+			dataType: "json",
+			async: false
+		}).responseText).feed.entry;
+		
+		formLength = parseInt( sheet7.length );
+	
+	
+			var newFormElement = document.createElement('form');
+			jQuery(newFormElement).attr('id', 's7_' + currlang + '-' + 0).addClass('row');
+			
+
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('Heading');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('input');
 			jQuery(newInputElement).attr('type','text');
-			jQuery(newFormElement).append(newInputElement);
-		}
+			jQuery(newInputElement).val(jQuery(sheet7)[0]['gsx$heading']['$t']);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+/*
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-2');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('Heading');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet7)[0]['gsx$name']['$t']);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-2');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('Heading');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet7)[0]['gsx$title']['$t']);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+*/
+
+
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newDivElementRow = document.createElement('div');
+			jQuery(newDivElementRow).addClass('row');
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('Nanme');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet7)[0]['gsx$heading']['$t']);
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+
+
+			
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('Title');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet7)[0]['gsx$title']['$t']);
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');	
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('Bio');
+			jQuery(newDivElement2).append(newInputElement);		
+			var newInputElement = document.createElement('textarea');
+			jQuery(newInputElement).val(jQuery(sheet7)[0]['gsx$bio']['$t']);
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+
+			
+			
+			jQuery(newDivElement).append(newDivElementRow);
+			jQuery(newFormElement).append(newDivElement);
+
+
+
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newDivElementRow = document.createElement('div');
+			jQuery(newDivElementRow).addClass('row');
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('circle image');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet7)[0]['gsx$circleimage']['$t']);
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('big image');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet7)[0]['gsx$photo']['$t']);
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			jQuery(newDivElement).append(newDivElementRow);
+			jQuery(newFormElement).append(newDivElement);
+
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newInputElement = document.createElement('span');
+			jQuery(newInputElement).addClass('sendButton');
+			jQuery(newInputElement).html('Send');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			
+			
+			
+			
+			jQuery(newDivContent).append(newFormElement);
+			
+		addNewForm('s7_');
+		jQuery('#select-7').append(newDivContent);
+	}
+	
+	
+
+	function sectionEight(){
+		//jQuery('#select-2 > div > div').remove();
+		jQuery('#select-8 > div').remove();
 		
+		newDivContent = document.createElement('div');
+		jQuery(newDivContent).attr('id','s8_' + currlang + '-row');		
+	
+		var sheet8 = $.parseJSON($.ajax({
+			url:  "http://spreadsheets.google.com/feeds/list/1TuOaSTC09LTl8EetGfbRC1hzAnrW658iEWaZ_sLhfFo/9/public/values?alt=json",
+			dataType: "json",
+			async: false
+		}).responseText).feed.entry;
+		
+		formLength = parseInt( sheet8.length );
+			 
+		var newFormElement = document.createElement('form');
+		jQuery(newFormElement).attr('id', 's8_' + currlang + '-' + 0).addClass('row');
+
+		var newDivElement = document.createElement('div');
+		jQuery(newDivElement).addClass('col-md-4');	
+		var newInputElement = document.createElement('label');
+		jQuery(newInputElement).html('Heading');
+		jQuery(newDivElement).append(newInputElement);
 		var newInputElement = document.createElement('input');
 		jQuery(newInputElement).attr('type','text');
-		jQuery(newFormElement).append(newInputElement);
+		jQuery(newInputElement).val(jQuery(sheet8)[0]['gsx$heading']['$t']);
+		jQuery(newDivElement).append(newInputElement);
+		jQuery(newFormElement).append(newDivElement);
+
+		var newDivElement = document.createElement('div');
+		jQuery(newDivElement).addClass('col-md-4');
+		var newInputElement = document.createElement('label');
+		jQuery(newInputElement).html('Subheading');
+		jQuery(newDivElement).append(newInputElement);
+		var newInputElement = document.createElement('input');
+		jQuery(newInputElement).attr('type','text');
+		jQuery(newInputElement).val(jQuery(sheet8)[0]['gsx$subheading']['$t']);
+		jQuery(newDivElement).append(newInputElement);
+		jQuery(newFormElement).append(newDivElement);
 		
-		if(page == 's1_'){
+		var newDivElement = document.createElement('div');
+		jQuery(newDivElement).addClass('col-md-4');
+		var newInputElement = document.createElement('span');
+		jQuery(newInputElement).addClass('sendButton');
+		jQuery(newInputElement).html('Send');
+		jQuery(newDivElement).append(newInputElement);
+		jQuery(newFormElement).append(newDivElement);
+		
+		jQuery(newDivContent).append(newFormElement);
+	
+		for (i = 1; i < sheet8.length; i++) {
+			var newFormElement = document.createElement('form');
+			jQuery(newFormElement).attr('id', 's6_' + currlang + '-' + i).addClass('row');
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('url');
+			jQuery(newDivElement).append(newInputElement);
 			var newInputElement = document.createElement('input');
 			jQuery(newInputElement).attr('type','text');
-			jQuery(newFormElement).append(newInputElement);
+			jQuery(newInputElement).val(jQuery(sheet8)[i]['gsx$url']['$t']);
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');	
+			var newDivElementRow = document.createElement('div');
+			jQuery(newDivElementRow).addClass('row');
+
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('heading');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet8)[i]['gsx$heading']['$t']);
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('subheading');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newInputElement).val(jQuery(sheet8)[i]['gsx$subheading']['$t']);
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+
+			jQuery(newDivElement).append(newDivElementRow);
+			jQuery(newFormElement).append(newDivElement);
+
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('type');
+			jQuery(newDivElement).append(newInputElement);
+			
+			var newDivElementRow = document.createElement('div');
+			jQuery(newDivElementRow).addClass('row');
+			
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-6');
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','radio').attr("name","radio").attr('value',"video");
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('image');
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-6');
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','radio').attr("name","radio").attr('value',"video");
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('video');
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			
+			jQuery(newDivElement).append(newDivElementRow);
+			jQuery(newFormElement).append(newDivElement);
+
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');
+			var newInputElement = document.createElement('span');
+			jQuery(newInputElement).addClass('sendButton');
+			jQuery(newInputElement).html('Send');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+
+			jQuery(newDivContent).append(newFormElement);
+		}
+		addNewForm('s8_');
+		jQuery('#select-8').append(newDivContent);
+	}
+	sectionEight();		
+	
+	
+	
+	function addNewForm(page){
+		var newFormElement = document.createElement('form');
+		jQuery(newFormElement).attr('id', page + currlang + '-' + formLength).addClass('row');
+		
+		var newDivCol = document.createElement('div');
+		
+		if(page == 's3_'){
+			
+			
+					var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('text');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			
+					var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('html boody');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('textarea');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			
+			jQuery(newDivCol).addClass('col-md-4');	
+			
+			
+			
+			
+		}
+		else if(page == 's1_'){
+			
+			
+			
+			
+			
+			
+					var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('text');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			
+					var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('anchor');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			
+			
+			jQuery(newDivCol).addClass('col-md-4');	
+			
 		} else	if(page == 's2_'){
+			/*
 			var newInputElement = document.createElement('input');
 			jQuery(newInputElement).attr('type','text');
 			jQuery(newFormElement).append(newInputElement);
 			var newInputElement = document.createElement('input');
 			jQuery(newInputElement).attr('type','text');
 			jQuery(newFormElement).append(newInputElement);
+			
+			
+					var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('title');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			*/
+					var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('text');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+					var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('title');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			jQuery(newDivCol).addClass('col-md-3');	
+					var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('time');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			jQuery(newDivCol).addClass('col-md-3');	
+		} else	if(page == 's4_'){
+			
+			
+					var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('title');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+					var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-4');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('html boody');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('textarea');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			
+			jQuery(newDivCol).addClass('col-md-4');	
+		}
+		 else	if(page == 's5_'){
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newFormElement).append(newInputElement);
+			var newInputElement = document.createElement('textarea');
+			jQuery(newFormElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newFormElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newFormElement).append(newInputElement);
+		
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');
+			var newDivElementRow = document.createElement('div');
+			jQuery(newDivElementRow).addClass('row');
+			
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('small');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('small color');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			jQuery(newDivElement).append(newDivElementRow);
+			jQuery(newFormElement).append(newDivElement);
+			
+			jQuery(newDivCol).addClass('col-md-3');	
+			
+		} else	if(page == 's6_'){
+		
+		
+					var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('title');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			
+			
+			
+			
+					var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('quote');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			
+			
+			
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');
+			var newDivElementRow = document.createElement('div');
+			jQuery(newDivElementRow).addClass('row');
+			
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('small');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('small color');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			jQuery(newDivElement).append(newDivElementRow);
+			jQuery(newFormElement).append(newDivElement);
+			
+			
+			
+			jQuery(newDivCol).addClass('col-md-3');	
+			
+			
+		} 
+		else if(page == 's7_'){
+		
+		/*
+		
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('url');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');
+			
+			var newDivElementRow = document.createElement('div');
+			jQuery(newDivElementRow).addClass('row');
+			
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('url');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement2);
+			jQuery(newDivElementRow).append(newDivElement2);
+			
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('url');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement2);
+			jQuery(newDivElementRow).append(newDivElement2);
+			
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('url');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('textarea');
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement2);
+			jQuery(newDivElementRow).append(newDivElement2);
+			
+			jQuery(newDivElement).append(newDivElementRow);
+			jQuery(newFormElement).append(newDivElement);
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');
+			
+			var newDivElementRow = document.createElement('div');
+			jQuery(newDivElementRow).addClass('row');
+			
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('url');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement2);
+			jQuery(newDivElementRow).append(newDivElement2);
+			
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('url');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement2);
+			jQuery(newDivElementRow).append(newDivElement2);
+			
+			
+			jQuery(newDivElement).append(newDivElementRow);
+			jQuery(newFormElement).append(newDivElement);
+			
+			
+			jQuery(newDivCol).addClass('col-md-3');			
+		*/
+		} 
+		else if(page == 's8_'){
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('url');
+			jQuery(newDivElement).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement).append(newInputElement);
+			jQuery(newFormElement).append(newDivElement);
+			
+			
+			
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');
+			var newDivElementRow = document.createElement('div');
+			jQuery(newDivElementRow).addClass('row');
+			
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('heading');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-12');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('subheading');
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','text');
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			jQuery(newDivElement).append(newDivElementRow);
+			jQuery(newFormElement).append(newDivElement);
+			
+			
+			
+			var newDivElement = document.createElement('div');
+			jQuery(newDivElement).addClass('col-md-3');
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('type');
+			jQuery(newDivElement).append(newInputElement);
+			var newDivElementRow = document.createElement('div');
+			jQuery(newDivElementRow).addClass('row');
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-6');
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','radio').attr("name","radio").attr('value',"video");
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('image');
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			var newDivElement2 = document.createElement('div');
+			jQuery(newDivElement2).addClass('col-md-6');
+			var newInputElement = document.createElement('input');
+			jQuery(newInputElement).attr('type','radio').attr("name","radio").attr('value',"video");
+			jQuery(newDivElement2).append(newInputElement);
+			var newInputElement = document.createElement('label');
+			jQuery(newInputElement).html('video');
+			jQuery(newDivElement2).append(newInputElement);
+			jQuery(newDivElementRow).append(newDivElement2);
+			jQuery(newDivElement).append(newDivElementRow);
+			jQuery(newFormElement).append(newDivElement);
+			jQuery(newDivCol).addClass('col-md-2');
+	
 		} else {
 			var newInputElement = document.createElement('textarea');
 			jQuery(newFormElement).append(newInputElement);
 		} 
-		 
-		var newInputElement = document.createElement('span');
-		jQuery(newInputElement).addClass('addButton');
-		jQuery(newInputElement).html('Add');
-		jQuery(newFormElement).append(newInputElement);
+		
+		
+		 if(page != 's7_'){
+		var newButtonElement = document.createElement('span');
+		jQuery(newButtonElement).addClass('addButton');
+		jQuery(newButtonElement).html('Add');
+		
+		jQuery(newDivCol).append(newButtonElement);
+		jQuery(newFormElement).append(newDivCol);
+		}
 		jQuery(newDivContent).append(newFormElement);
 		formLength++;
 		//triggerAddButton();
@@ -728,7 +1825,7 @@ script
 		for(var i = 0 ; i < data.elements.length ; i++){
 			var item = data.elements.item(i);
 			//if(data.elements.item(i).value == ''){ return null; }
-			if( item.type == 'textarea' || item.type == 'text' || item.type == 'hidden'){
+			if( item.type == 'textarea' || item.type == 'text' || item.type == 'hidden' || item.type == 'radio'){
 				vals[0].push(data.elements.item(i).value);
 			}
 			if(  item.type == 'select-one' ){
